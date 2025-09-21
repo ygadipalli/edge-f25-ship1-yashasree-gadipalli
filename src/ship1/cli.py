@@ -40,8 +40,8 @@ def main(argv=None):
             print("(no entries yet)")
             return 0
         # TODO: Update list command to show numbered entries with timestamps
-        # - Use enumerate(entries, 1) to get 1-based numbering
-        # - Format: "{i}. {e['t']} — {e['v']}"
+        for i, e in enumerate(entries, 1):
+            print(f"{i}. {e['t']} — {e['v']}")
         for e in entries:
             print(f"{e['t']} — {e['v']}")
         return 0
@@ -67,17 +67,26 @@ def main(argv=None):
 
     if ns.cmd == "delete":
         # TODO: Implement delete command
-        # - Call delete_entry(ns.index)
-        # - If successful: print "Deleted entry {ns.index}" and return 0
-        # - If failed: print error message to stderr and return 1
+        success = delete_entry(ns.index)
+        if success:
+            print(f"Deleted entry {ns.index}")
+            return 0
+        else:
+            print(f"Error: Entry {ns.index} does not exist", file=sys.stderr)
+            return 1
         print("Delete command not implemented yet")
         return 1
 
     if ns.cmd == "search":
         # TODO: Implement search command
-        # - Call search_entries(ns.query)
-        # - If no results: print "No entries found containing '{ns.query}'" and return 0
-        # - If results found: print count and list each result with numbering
+        results = search_entries(ns.query)
+        if not results:
+            print(f"No entries found containing '{ns.query}'")
+            return 0
+        print(f"Found {len(results)} entries:")
+        for i, entry in enumerate(results, 1):
+            print(f"{i}. {entry['t']} — {entry['v']}")
+            return 0
         print("Search command not implemented yet")
         return 1
 

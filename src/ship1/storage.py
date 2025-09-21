@@ -52,12 +52,12 @@ def save_entries(data: List[Dict]) -> None:
 
 def add_entry(text: str) -> None:
     """Insert a new entry at the start of the list with current timestamp."""
-    # TODO: Implement enhanced timestamp formatting
-    # - Use time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) for readable format
-    # - Create new_entry dict with "t" (timestamp) and "v" (text) keys
-    # - Insert at beginning of entries list (newest first)
-    # - Save the updated entries
-    raise NotImplementedError
+    import time
+    entries = load_entries()
+    timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    new_entry = {"t": timestamp, "v": text}
+    entries.insert(0, new_entry)
+    save_entries(entries)
 
 def clear_entries() -> None:
     """Erase all entries (write an empty list)."""
@@ -66,17 +66,18 @@ def clear_entries() -> None:
 def delete_entry(index: int) -> bool:
     """Delete an entry by its 1-based index. Returns True if successful."""
     # TODO: Implement delete functionality
-    # - Load current entries
-    # - Check if index is valid (1 <= index <= len(entries))
-    # - If valid: remove entry at index-1 (convert to 0-based), save, return True
-    # - If invalid: return False
-    raise NotImplementedError
+    entries = load_entries()
+    if 1 <= index <= len(entries):
+            entries.pop(index-1)
+            save_entries(entries)
+            return True
+    else:
+            return False
 
 def search_entries(query: str) -> List[Dict]:
     """Search for entries containing the query text (case-insensitive)."""
-    # TODO: Implement search functionality
-    # - Load current entries
-    # - Convert query to lowercase for case-insensitive search
-    # - Filter entries where query appears in entry["v"] (also lowercase)
-    # - Return list of matching entries
-    raise NotImplementedError
+    # TOD O: Implement search functionality
+    entries = load_entries()
+    query_lower = query.lower()
+    results = [entry for entry in entries if query_lower in entry["v"].lower()]
+    return results
